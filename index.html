@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fiji Campus Bus & Weather Dashboard</title>
+
+<style>
+    /* ==========================================
+       General Page Styling
+    ========================================== */
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to right, #4facfe, #00c6ff);
+        margin: 0;
+        padding: 20px;
+    }
+
+    .container {
+        max-width: 700px;
+        margin: auto;
+        background: #ffffff;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    h1 {
+        text-align: center;
+        color: #004080;
+    }
+
+    label {
+        font-weight: bold;
+    }
+
+    input {
+        width: 100%;
+        padding: 10px;
+        margin-top: 8px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 16px;
+        box-sizing: border-box;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        background: #0077cc;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #005fa3;
+    }
+
+    .result,
+    .weather {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 8px;
+        background: #f2f8ff;
+    }
+
+    .result h3,
+    .weather h3 {
+        margin-top: 0;
+        color: #004080;
+    }
+
+    /* Error message styling */
+    .error {
+        color: red;
+        font-weight: bold;
+    }
+
+    /* Success message styling */
+    .success {
+        color: green;
+        font-weight: bold;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🚌 Fiji Campus Bus & Weather Dashboard</h1>
+
+    <!--
+        Input field where users enter
+        their bus fare budget in Fijian Dollars.
+    -->
+    <label for="budget">Enter your bus fare budget (FJD):</label>
+    <input type="number" id="budget" placeholder="Example: 10">
+
+    <!--
+        Button to calculate the number
+        of bus rides the user can afford.
+    -->
+    <button onclick="calculateRides()">Calculate Bus Rides</button>
+
+    <!--
+        Area where calculation results
+        or validation messages appear.
+    -->
+    <div class="result">
+        <h3>Affordable Bus Rides</h3>
+        <p id="ridesResult">
+            Enter your budget and click the button.
+        </p>
+    </div>
+
+    <!--
+        Static weather forecast for Suva.
+    -->
+    <div class="weather">
+        <h3>Today's Weather - Suva</h3>
+        <p>
+            🌤️ Partly Cloudy<br>
+            🌡️ Temperature: 27°C<br>
+            💨 Light southeast winds<br>
+            🌦️ Small chance of afternoon showers
+        </p>
+    </div>
+
+</div>
+
+<script>
+    /*
+        Constant representing
+        the cost of one bus ride.
+    */
+    const BUS_FARE = 1.50;
+
+    /*
+        Function:
+        Calculates how many complete
+        bus rides the user can afford.
+
+        It also validates that the
+        user entered a positive amount.
+    */
+    function calculateRides() {
+
+        // Read the input as text
+        const budgetInput = document.getElementById("budget").value.trim();
+
+        // Convert the input into a number
+        const budget = parseFloat(budgetInput);
+
+        // Reference to the result paragraph
+        const result = document.getElementById("ridesResult");
+
+        /*
+            Validation:
+            Show an error if the box is empty,
+            contains invalid text,
+            or contains a negative number.
+        */
+        if (budgetInput === "" || isNaN(budget) || budget < 0) {
+            result.innerHTML =
+                "<span class='error'>Please enter a valid positive dollar amount.</span>";
+            return;
+        }
+
+        // Calculate the number of complete rides
+        const rides = Math.floor(budget / BUS_FARE);
+
+        // Calculate the remaining balance
+        const remaining = (budget - (rides * BUS_FARE)).toFixed(2);
+
+        // Display the result
+        result.innerHTML =
+            `<span class="success">
+                With FJD ${budget.toFixed(2)}, you can afford <strong>${rides}</strong> bus ride(s).
+             </span><br><br>
+             Remaining balance: <strong>FJD ${remaining}</strong>.`;
+    }
+</script>
+
+</body>
+</html>
